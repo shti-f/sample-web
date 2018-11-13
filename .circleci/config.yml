@@ -13,16 +13,16 @@ jobs:
  
       - add_ssh_keys:
           fingerprints:
-            - "xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx"
+            - "55:14:1c:69:99:aa:02:8e:a6:97:5c:c9:a3:fb:25:4c"
  
       - run:
           name: Start ssh-keyscan
           command: |
-            ssh-keyscan ${HOST_NAME} >> ~/.ssh/known_hosts
+            ssh-keyscan -p 10022 ${HOST_NAME} >> ~/.ssh/known_hosts
  
       - deploy:
           name: Start master deploy
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                rsync -av --delete --exclude='.git' --exclude='.circleci' ./ ${USER_NAME}@${HOST_NAME}:/var/www/html/
+                	rsync -av --delete --rsh="ssh -p 10022" --exclude='.git' --exclude='.circleci' ./ ${USER_NAME}@${HOST_NAME}:/var/www/html/
             fi
